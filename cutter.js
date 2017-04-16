@@ -7,24 +7,24 @@
     let scale = config.scale;
     let points = [];
     let start = [50, 50];
-    let numx = 10;
-    let numy = 10;
+    let numx = 20;
+    let numy = 5;
 
-    for (let yi = 0; yi < numy; yi++) {       
+    for (let yi = 0; yi < numy; yi++) {
         let x0 = start[0];
         let y0 = start[1] + scale * yi * ((4 + 2 / 3) * Math.sqrt(3) / 2);
         points.push(`${x0} ${y0}`);
         let tt = 0;
         if (yi > 0) {
             tt = 1;
-        } 
+        }
         let x1 = x0 + scale * (numx + tt);
         let y1 = y0;
         points.push(`${x1} ${y1}`);
 
         draw(points);
         if (yi === 0) {
-            for (let xi = 0; xi < numx+1; xi++) {
+            for (let xi = 0; xi < numx + 1; xi++) {
                 // backward
                 let xj = numx - xi;
                 let x2 = x0 + scale * xj;
@@ -94,13 +94,16 @@
         points.push(`${x13} ${y13}`);
         draw(points);
         for (let xi = 0; xi < numx + 2; xi++) {
+            if (xi === numx + 1 && yi === numy - 1) {
+                continue;
+            }
             // backward
             let xj = numx - xi;
             let rr = 0;
             if (xj === -1) {
                 rr = 1 / 2;
             }
-            let x14 = x0 + scale * (xj + 1 / 2 + rr );
+            let x14 = x0 + scale * (xj + 1 / 2 + rr);
             let y14 = y0 + scale * (Math.sqrt(3) * (3 / 2 + 1 / 3 + rr));
             points.push(`${x14} ${y14}`);
             let ss = 1;
@@ -108,7 +111,7 @@
                 ss = 1 / 2;
             }
             let x15 = x14 + scale * (1 - rr) * ss;
-            let y15 = y14 + scale * (Math.sqrt(3)) * (1 -rr) * ss;
+            let y15 = y14 + scale * (Math.sqrt(3)) * (1 - rr) * ss;
             points.push(`${x15} ${y15}`);
             draw(points);
         }
@@ -116,7 +119,7 @@
     console.log('</svg>');
 
     function draw(points) {
-        console.log(`<path d="M ${points.join(' L ') } z"/>`);
+        console.log(`<path d="M ${points.join(' L ')} z"/>`);
         points.length = 0;
     }
 })(console);
