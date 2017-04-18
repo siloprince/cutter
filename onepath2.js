@@ -7,23 +7,29 @@
     let scale = config.scale;
     let points = [];
     let start = [50, 50];
-    let numx = 32;
-    let numy = 6;
-
-    numx = 26; 
-    numy = 4;
+    let numx = 20;
+    let numy = 5;
 
     for (let yi = 0; yi < numy+1; yi++) {
         let x0 = start[0];
         let y0 = start[1] + scale * yi * (2 + Math.sqrt(3));
-        points.push(`${x0} ${y0}`);
+        let xs = 0;
+        let xe = 0;
+        if (yi===0) {
+            xs = scale;
+            xe = 0;
+        } else if (yi===numy) {
+            xs = 0;
+            xe = -scale;
+        }
+        points.push(`${x0+xs} ${y0}`);
 
         let x1 = x0 + scale * (numx + 1);
         let y1 = y0;
-        points.push(`${x1} ${y1}`);
+        points.push(`${x1+xe} ${y1}`);
         draw(points);
 
-        if (yi === numy) {
+        if (yi===numy) {
             break;
         }
         if (yi === 0) {
@@ -40,8 +46,8 @@
                 draw(points);
             }
 
-            for (let xi = 0; xi < numx + 1; xi++) {
-                let x4 = x0 + scale * (xi);
+            for (let xi = 0; xi < numx ; xi++) {
+                let x4 = x0 + scale * (xi+1);
                 let y4 = y0;
                 points.push(`${x4} ${y4}`);
                 let x5 = x4;
@@ -71,28 +77,35 @@
         for (let xi = 0; xi < numx + 1; xi++) {
             // backward
             let xj = numx - xi;
-            let x10 = x0 + scale * (xj);
-            let y10 = y0 + scale * (1);
+            let xs = 0;
+            let xe = 0;
+            let ys = 0;
+            let ye = 0;
+            if (xj===0 ) {
+                xs = 1/2;
+                ys = Math.sqrt(3)/2;
+                xe = -1/2;
+                ye = -Math.sqrt(3)/2;
+            } else if (xj===numx) {
+                xe = -1/2;
+                ye = -Math.sqrt(3)/2;
+            }
+            let x10 = x0 + scale * (xj+xs);
+            let y10 = y0 + scale * (1+ys);
             points.push(`${x10} ${y10}`);
-            let x11 = x10 + scale * (1);
-            let y11 = y10 + scale * (Math.sqrt(3));
+            let x11 = x10 + scale * (1+xe);
+            let y11 = y10 + scale * (Math.sqrt(3)+ye);
             points.push(`${x11} ${y11}`);
             draw(points);
         }
-        for (let xi = 0; xi < numx + 2; xi++) {
+        for (let xi = 0; xi < numx; xi++) {
             let ys = 0;
             let ye = 0;
-            if (xi === 0) {
-                if (yi === numy - 1) {
-                    continue;
-                }
-                ys = 1;
-                ye = -1;
-            } else if (xi === numx + 1 || yi === numy - 1) {
+            if (yi === numy - 1) {
                 ys = 0;
                 ye = -1;
             }
-            let x12 = x0 + scale * (xi);
+            let x12 = x0 + scale * (xi+1);
             let y12 = y0 + scale * (1 + ys + Math.sqrt(3));
             points.push(`${x12} ${y12}`);
             let x13 = x12;
@@ -135,7 +148,7 @@
     console.log('</svg>');
 
     function draw(points) {
-        console.log(`<path stroke="black" stroke-width="1" fill="none" d="M ${points.join(' L ')}"/>`);
+        console.log(`<path d="M ${points.join(' L ')} z"/>`);
         points.length = 0;
     }
 })(console);

@@ -7,10 +7,13 @@
     let scale = config.scale;
     let points = [];
     let start = [50, 50];
-    let numx = 20;
-    let numy = 5;
+    let numx = 32;
+    let numy = 6;
 
-    for (let yi = 0; yi < numy; yi++) {
+    numx = 28; 
+    numy = 4;
+
+    for (let yi = 0; yi < numy + 1; yi++) {
         let x0 = start[0];
         let y0 = start[1] + scale * yi * ((4 + 2 / 3) * Math.sqrt(3) / 2);
         points.push(`${x0} ${y0}`);
@@ -21,8 +24,10 @@
         let x1 = x0 + scale * (numx + tt);
         let y1 = y0;
         points.push(`${x1} ${y1}`);
-
         draw(points);
+        if (yi === numy) {
+            break;
+        }
         if (yi === 0) {
             for (let xi = 0; xi < numx + 1; xi++) {
                 // backward
@@ -119,7 +124,7 @@
     console.log('</svg>');
 
     function draw(points) {
-        console.log(`<path d="M ${points.join(' L ')} z"/>`);
+        console.log(`<path d="M ${points.join(' L ')}"/>`);
         points.length = 0;
     }
 })(console);
